@@ -1,40 +1,48 @@
-# ktor-mdeditor
+# ktor-mdeditor — бэкенд
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+REST API для MDEditor приложения. Хранит markdown файлы пользователей, авторизация через JWT.
 
-Here are some useful links to get you started:
+## Что есть
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need
-  to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+- регистрация и вход (JWT токены)
+- загрузка и скачивание .md файлов
+- список документов пользователя
+- удаление документов
 
-## Features
-
-Here's a list of features included in this project:
-
-| Name                                               | Description                                                 |
-| ----------------------------------------------------|------------------------------------------------------------- |
-| [Routing](https://start.ktor.io/p/routing-default) | Allows to define structured routes and associated handlers. |
-
-## Building & Running
-
-To build or run the project, use one of the following tasks:
-
-| Task                                    | Description                                                          |
-| -----------------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`                        | Run the tests                                                        |
-| `./gradlew build`                       | Build everything                                                     |
-| `./gradlew buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `./gradlew buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `./gradlew publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `./gradlew run`                         | Run the server                                                       |
-| `./gradlew runDocker`                   | Run using the local docker image                                     |
-
-If the server starts successfully, you'll see the following output:
+## Эндпоинты
 
 ```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
+POST /auth/register
+POST /auth/login
+
+GET    /documents
+POST   /documents
+GET    /documents/{id}
+DELETE /documents/{id}
 ```
 
+## Стек
+
+- Ktor 3.x + Netty
+- PostgreSQL + Exposed
+- BCrypt для паролей
+- JWT для авторизации
+
+## Запуск локально
+
+```
+./gradlew run
+```
+
+Нужен PostgreSQL. Переменные окружения:
+
+```
+DB_URL=jdbc:postgresql://localhost:5432/mdeditor
+DB_USER=postgres
+DB_PASSWORD=...
+JWT_SECRET=...
+```
+
+## Деплой
+
+Деплоится через Dokploy автоматически при пуше в master.
